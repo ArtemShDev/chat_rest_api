@@ -1,3 +1,4 @@
+/*
 package org.exchange.springboot.chatrest.controller;
 
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ class RoleRESTControllerTest {
         assertTrue(str.contains("\"id\":1"));
     }
      */
-
+/*
     @Test
     void whenGETRoleByIDThenPayloadIsOK() throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -93,3 +94,4 @@ class RoleRESTControllerTest {
         assertTrue(str.contains("\"id\":1"));
     }
 }
+*/

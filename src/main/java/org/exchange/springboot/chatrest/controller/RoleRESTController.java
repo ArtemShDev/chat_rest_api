@@ -2,6 +2,7 @@ package org.exchange.springboot.chatrest.controller;
 
 import org.exchange.springboot.chatrest.entity.Role;
 import org.exchange.springboot.chatrest.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

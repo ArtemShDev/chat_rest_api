@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,68 +22,56 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:insert.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class RoleRESTControllerTest {
+class PersonRESTControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @Test
-    public void whenGETRolesThenStatusIsOK() throws Exception {
+    public void whenGETPersonsThenStatusIsOK() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/roles/")
+                .get("/api/persons/")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
-    void whenPOSTRoleThenOK() throws Exception {
+    void whenPOSTPersonThenOK() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/roles/").content("{\"name\": \"ROLE\"}")
+                .post("/api/persons/").content("{\"login\": \"Admin\", "
+                        + "\"password\": \"Admin\", \"role\": {\"id\": 1}}")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", Matchers.is("ROLE")))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.login", Matchers.is("Admin")))
+                .andExpect(jsonPath("$.password", nullValue()))
                 .andExpect(jsonPath("$.id", Matchers.any(Integer.class)));
     }
 
     @Test
-    public void whenGETRolesByIDThenOK() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/roles/").content("{\"name\": \"ROLE\"}")
-                .contentType(MediaType.APPLICATION_JSON)).andReturn();
-        String respBody = new String(result.getResponse().getContentAsByteArray());
-        Pattern pattern = Pattern.compile("id\":\\d+");
-        Matcher matcher = pattern.matcher(respBody);
-        matcher.find();
-        respBody = matcher.group();
+    public void whenGETPersonsByIDThenOK() throws Exception {
+        String json = "{id=1, login=Admin, email=Admin@gmail.com, password=null, role={id=1, name=TEST_ROLE}}";
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/roles/" + Integer.parseInt(respBody.substring(4)))
+                .get("/api/persons/1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasToString(json)));
     }
 
     @Test
-    void whenPUTRoleThenOK() throws Exception {
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/roles/").content("{\"name\": \"ROLE\"}")
-                .contentType(MediaType.APPLICATION_JSON)).andReturn();
-        String respBody = new String(result.getResponse().getContentAsByteArray());
-        Pattern pattern = Pattern.compile("id\":\\d+");
-        Matcher matcher = pattern.matcher(respBody);
-        matcher.find();
-        respBody = matcher.group();
+    void whenPUTPersonThenOK() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/api/roles/").content("{\"id\": "
-                        + Integer.parseInt(respBody.substring(4)) + ", \"name\": \"ROLE_Modify\"}")
-                .accept(MediaType.APPLICATION_JSON)
+                .put("/api/persons/").content("{\"id\": 1, \"login\": \"Admin\", "
+                        + "\"password\": \"Admin\", \"role\": {\"id\": 1}}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
     }
 
     @Test
-    void whenDELETERoleThenOK() throws Exception {
+    void whenDELETEPersonThenOK() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/roles/").content("{\"name\": \"ROLE_DELETE\"}")
+                .post("/api/persons/").content("{\"login\": \"FOR_DELETE\", "
+                        + "\"password\": \"FOR_DELETE\", \"role\": {\"id\": 1}}")
                 .contentType(MediaType.APPLICATION_JSON)).andReturn();
         String respBody = new String(result.getResponse().getContentAsByteArray());
         Pattern pattern = Pattern.compile("id\":\\d+");
@@ -91,7 +79,7 @@ class RoleRESTControllerTest {
         matcher.find();
         respBody = matcher.group();
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/roles/" + Integer.parseInt(respBody.substring(4)))
+                .delete("/api/persons/" + Integer.parseInt(respBody.substring(4)))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

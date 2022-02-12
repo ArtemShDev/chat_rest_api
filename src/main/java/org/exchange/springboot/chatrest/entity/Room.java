@@ -1,6 +1,5 @@
 package org.exchange.springboot.chatrest.entity;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -14,7 +13,7 @@ public class Room implements Serializable {
     private String name;
     @OneToMany(mappedBy = "room")
     private Set<Message> messages;
-    @OneToOne
+    @ManyToOne
     private Person creator;
     /*
     @ManyToMany

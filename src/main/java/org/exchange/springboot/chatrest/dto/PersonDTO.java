@@ -3,6 +3,7 @@ package org.exchange.springboot.chatrest.dto;
 import org.exchange.springboot.chatrest.entity.Role;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ public class PersonDTO implements Serializable {
     private String email;
     @NotBlank(message = "password must be > 3 symbols")
     private String password;
+    @NotNull(message = "The role must be filled in")
     private Role role;
 
     public PersonDTO() {

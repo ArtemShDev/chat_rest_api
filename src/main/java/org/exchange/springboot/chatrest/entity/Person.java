@@ -21,7 +21,8 @@ public class Person implements Serializable {
     private Role role;
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<Room> rooms;
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
     private Set<Message> messages;
 
     public Person() {

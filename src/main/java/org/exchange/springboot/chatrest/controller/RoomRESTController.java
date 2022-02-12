@@ -3,6 +3,7 @@ package org.exchange.springboot.chatrest.controller;
 import org.exchange.springboot.chatrest.dto.PersonDTO;
 import org.exchange.springboot.chatrest.dto.RoomDTO;
 import org.exchange.springboot.chatrest.dto.RoomMessageDTO;
+import org.exchange.springboot.chatrest.dto.RoomPersonDTO;
 import org.exchange.springboot.chatrest.entity.Room;
 import org.exchange.springboot.chatrest.mapper.PersonMapperDTO;
 import org.exchange.springboot.chatrest.mapper.RoomMapperDTO;
@@ -11,7 +12,6 @@ import org.exchange.springboot.chatrest.service.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,26 +29,32 @@ public class RoomRESTController {
     }
 
     @GetMapping("/")
-    public List<RoomDTO> findAll() {
+    public ResponseEntity<List<RoomDTO>> findAll() {
         List<Room> list = rooms.findAll();
-        return list.stream().map(RoomMapperDTO::mapToRoomDTO
-        ).collect(Collectors.toList());
+        return new ResponseEntity<>(list.stream().map(RoomMapperDTO::mapToRoomDTO
+        ).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public RoomDTO findById(@PathVariable int id) {
-        return RoomMapperDTO.mapToRoomDTO(rooms.findById(id));
+    public ResponseEntity<RoomDTO> findById(@PathVariable int id) {
+        return new ResponseEntity<>(RoomMapperDTO.mapToRoomDTO(rooms.findById(id)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/messages")
-    public RoomMessageDTO findByIdGetMessages(@PathVariable int id) {
-        return RoomMapperDTO.mapToRoomMessageDTO(rooms.findById(id));
+    public ResponseEntity<RoomMessageDTO> findByIdGetMessages(@PathVariable int id) {
+        return new ResponseEntity<>(RoomMapperDTO.mapToRoomMessageDTO(rooms.findById(id)), HttpStatus.OK);
     }
 
+    /*
     @GetMapping("/{id}/users")
-    public List<PersonDTO> findByIdGetUsers(@PathVariable int id) {
-        return persons.findAllByRoomsId(id).stream().map(PersonMapperDTO::mapToPersonDTO)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<PersonDTO>> findByIdGetUsers(@PathVariable int id) {
+        return new ResponseEntity<>(persons.findAllByRoomsId(id).stream().map(PersonMapperDTO::mapToPersonDTO)
+                .collect(Collectors.toList()), HttpStatus.OK);
+    }
+     */
+    @GetMapping("/{id}/users")
+    public ResponseEntity<RoomPersonDTO> findByIdGetUsers(@PathVariable int id) {
+        return new ResponseEntity<>(RoomMapperDTO.mapToRoomPersonDTO(rooms.findById(id)), HttpStatus.OK);
     }
 
     @PutMapping("/")

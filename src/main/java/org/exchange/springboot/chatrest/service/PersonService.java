@@ -12,6 +12,4 @@ public interface PersonService {
     void delete(Person person);
 
     Person save(Person person);
-
-    List<Person> findAllByRoomsId(Integer roomId);
 }

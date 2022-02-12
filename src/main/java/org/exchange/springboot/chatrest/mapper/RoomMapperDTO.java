@@ -1,8 +1,6 @@
 package org.exchange.springboot.chatrest.mapper;
 
-import org.exchange.springboot.chatrest.dto.MessageDTOCut;
-import org.exchange.springboot.chatrest.dto.RoomDTO;
-import org.exchange.springboot.chatrest.dto.RoomMessageDTO;
+import org.exchange.springboot.chatrest.dto.*;
 import org.exchange.springboot.chatrest.entity.Room;
 
 import java.util.Set;
@@ -12,6 +10,14 @@ public final class RoomMapperDTO {
 
     public static RoomDTO mapToRoomDTO(Room room) {
         return new RoomDTO(room.getId(), room.getName(), PersonMapperDTO.mapToPersonDTO(room.getCreator()));
+    }
+
+    public static RoomPersonDTO mapToRoomPersonDTO(Room room) {
+        Set<PersonDTO> personDTOSet = room.getPersons().stream()
+                .map(person -> new PersonDTO(person.getId(),
+                        person.getLogin(), person.getEmail(), null, person.getRole()))
+                .collect(Collectors.toSet());
+        return new RoomPersonDTO(room.getId(), room.getName(), personDTOSet);
     }
 
     public static Room mapToRoom(RoomDTO roomDTO) {

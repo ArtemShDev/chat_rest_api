@@ -2,12 +2,15 @@ package org.exchange.springboot.chatrest.controller;
 
 import org.exchange.springboot.chatrest.dto.MessageDTO;
 import org.exchange.springboot.chatrest.entity.Message;
+import org.exchange.springboot.chatrest.entity.Person;
+import org.exchange.springboot.chatrest.entity.Room;
 import org.exchange.springboot.chatrest.mapper.MessageMapperDTO;
 import org.exchange.springboot.chatrest.service.MessageService;
+import org.exchange.springboot.chatrest.service.RoomService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,8 +21,11 @@ public class MessageRESTController {
 
     private final MessageService messages;
 
-    public MessageRESTController(final MessageService messages) {
+    private final RoomService rooms;
+
+    public MessageRESTController(final MessageService messages, final RoomService rooms) {
         this.messages = messages;
+        this.rooms = rooms;
     }
 
     @GetMapping("/")
@@ -43,8 +49,12 @@ public class MessageRESTController {
 
     @PostMapping("/")
     public ResponseEntity<MessageDTO> create(@Valid @RequestBody MessageDTO messageDTO) {
+        Room room = rooms.findById(messageDTO.getRoom().getId());
+        room.getPersons().add(new Person(messageDTO.getAuthor().getId(), "any"));
+        rooms.save(room);
+        Message message = messages.save(MessageMapperDTO.mapToMassage(messageDTO));
         return new ResponseEntity<>(
-                MessageMapperDTO.mapToMassageDTO(messages.save(MessageMapperDTO.mapToMassage(messageDTO))),
+                MessageMapperDTO.mapToMassageDTO(message),
                 HttpStatus.CREATED
         );
     }

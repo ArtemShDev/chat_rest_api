@@ -36,9 +36,4 @@ public class PersonServiceImpl implements PersonService {
     public Person save(Person person) {
         return personRepository.save(person);
     }
-
-    @Override
-    public List<Person> findAllByRoomsId(Integer roomId) {
-        return personRepository.findAllByRoomsId(roomId);
-    }
 }

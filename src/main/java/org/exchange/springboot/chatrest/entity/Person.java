@@ -1,8 +1,6 @@
 package org.exchange.springboot.chatrest.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -19,11 +17,11 @@ public class Person implements Serializable {
     private String email;
     @ManyToOne(cascade = {CascadeType.DETACH})
     private Role role;
-    @ManyToMany(cascade = CascadeType.ALL)
-    private Set<Room> rooms;
-    @OneToMany(cascade = CascadeType.ALL)
+    /*
+    @OneToMany
     @JoinColumn(name = "author_id")
     private Set<Message> messages;
+     */
 
     public Person() {
     }

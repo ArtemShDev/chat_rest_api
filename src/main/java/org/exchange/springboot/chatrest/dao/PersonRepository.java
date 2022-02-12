@@ -8,8 +8,9 @@ import java.util.List;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Integer> {
-
+    /*
     @Query("select distinct person from Person person "
             + "join fetch person.messages msg where msg.room.id = ?1")
     List<Person> findAllByRoomsId(Integer roomId);
+     */
 }

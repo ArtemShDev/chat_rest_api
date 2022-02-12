@@ -15,10 +15,10 @@ public class Room implements Serializable {
     private Set<Message> messages;
     @ManyToOne
     private Person creator;
-    /*
     @ManyToMany
+    @JoinTable(name = "persons_rooms", joinColumns = {@JoinColumn(name = "rooms_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "person_id", referencedColumnName = "id")})
     private Set<Person> persons;
-     */
 
     public Room() {
     }
@@ -64,6 +64,14 @@ public class Room implements Serializable {
 
     public void setCreator(Person creator) {
         this.creator = creator;
+    }
+
+    public Set<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Set<Person> persons) {
+        this.persons = persons;
     }
 
     @Override

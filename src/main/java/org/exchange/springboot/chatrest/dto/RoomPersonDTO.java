@@ -1,27 +1,27 @@
 package org.exchange.springboot.chatrest.dto;
-import javax.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
-public class RoomDTO implements Serializable {
+public class RoomPersonDTO implements Serializable {
 
     private int id;
-    @NotBlank(message = "name must be > 3 symbols")
     private String name;
-    private PersonDTO creator;
+    private Set<PersonDTO> persons;
 
-    public RoomDTO() {
+    public RoomPersonDTO() {
     }
 
-    public RoomDTO(int id, String name) {
+    public RoomPersonDTO(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public RoomDTO(int id, String name, PersonDTO creator) {
+    public RoomPersonDTO(int id, String name, Set<PersonDTO> persons) {
         this.id = id;
         this.name = name;
-        this.creator = creator;
+        this.persons = persons;
     }
 
     public int getId() {
@@ -40,12 +40,12 @@ public class RoomDTO implements Serializable {
         this.name = name;
     }
 
-    public PersonDTO getCreator() {
-        return creator;
+    public Set<PersonDTO> getPersons() {
+        return persons;
     }
 
-    public void setCreator(PersonDTO creator) {
-        this.creator = creator;
+    public void setPersons(Set<PersonDTO> persons) {
+        this.persons = persons;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class RoomDTO implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        RoomDTO room = (RoomDTO) o;
+        RoomPersonDTO room = (RoomPersonDTO) o;
         return id == room.id;
     }
 

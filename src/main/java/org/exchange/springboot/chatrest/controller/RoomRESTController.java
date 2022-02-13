@@ -52,7 +52,7 @@ public class RoomRESTController {
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
      */
-    @GetMapping("/{id}/users")
+    @GetMapping("/{id}/persons")
     public ResponseEntity<RoomPersonDTO> findByIdGetUsers(@PathVariable int id) {
         return new ResponseEntity<>(RoomMapperDTO.mapToRoomPersonDTO(rooms.findById(id)), HttpStatus.OK);
     }
